@@ -17,15 +17,6 @@ public class UIManager : MonoBehaviour
         Debug.Log("current scene after: " + (currentScene.buildIndex));
     }
 
-    /*void Update() {
-        // this is a temporary measure until logic has been coded into the game
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Debug.Log("current scene: " + (currentScene.buildIndex));
-            SceneManager.LoadScene(currentScene.buildIndex + 1);
-        }
-    }
-
     public void PlayGame() {
 
         if (currentScene.name == "StartScreen") 
@@ -43,6 +34,6 @@ public class UIManager : MonoBehaviour
         //Application.Quit();
         UnityEditor.EditorApplication.isPlaying = false;
 
-    }*/
+    }
 
 }

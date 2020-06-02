@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class GM : MonoBehaviour 
@@ -7,6 +8,7 @@ public class GM : MonoBehaviour
 
     Data data;
     public GameObject uim;
+    public GameObject[] npcArr;
 
     static GM mSingleton = null;
 
@@ -43,7 +45,20 @@ public class GM : MonoBehaviour
         // this is a temporary measure until logic has been coded into the game
         if (Input.GetKeyDown(KeyCode.W))
         {
-            uim.GetComponent<UIManager>().ChangeScene();
+            uim = GameObject.FindGameObjectWithTag("UI");
+            //uim.GetComponent<UIManager>().ChangeScene();
+
+            npcArr = GameObject.FindGameObjectsWithTag("NPC");
+            Debug.Log("npc array: " + npcArr.ToString());
+            Debug.Log("npc array size: " + npcArr.Length);
+
+            foreach (GameObject npc in npcArr)
+            {
+                npc.SetActive(false);
+            }
+
+            Debug.Log("npc array: " + npcArr.ToString());
+            Debug.Log("npc array size: " + npcArr.Length);
         }
     }
 }
