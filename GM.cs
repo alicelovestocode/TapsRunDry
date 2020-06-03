@@ -55,6 +55,7 @@ public class GM : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("start has been called");
         uim = GameObject.FindGameObjectWithTag("UI");
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
         foreach (GameObject npc in npcArr)
