@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.LoadScene(currentScene.buildIndex + 1);
         }
-        else if (currentScene.name == "LevelOne") {
+        else if (currentScene.name == "Choices") {
             SceneManager.LoadScene(currentScene.name);
         }
 
