@@ -55,9 +55,9 @@ public class GM : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("start has been called");
         uim = GameObject.FindGameObjectWithTag("UI");
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
+
         foreach (GameObject npc in npcArr)
         {
             npc.GetComponent<Renderer>().enabled = false;
@@ -69,44 +69,27 @@ public class GM : MonoBehaviour
 
     void Summon()
     {
-        npcList[0].GetComponent<Renderer>().enabled = true;
-        Debug.Log("npc list length before removal: " + npcList.Count);
-    }
-
-    public void Yes()
-    {
-        npcList[0].GetComponent<Renderer>().enabled = false;
-        npcList.RemoveAt(0);
-        Debug.Log("npc list length after removal: " + npcList.Count);
-
-        if (npcList[0].GetComponent<Renderer>().enabled == false)
+        if (npcList.Count == 0)
         {
-            Debug.Log("npc removed: " + npcList[0].name);
+            uim.GetComponent<UIManager>().ChangeScene();
         }
         else
         {
-            Debug.Log("npc not removed");
+            npcList[0].GetComponent<Renderer>().enabled = true;
         }
+    }
+
+    public void Approve()
+    {
+        npcList[0].GetComponent<Renderer>().enabled = false;
+        npcList.RemoveAt(0);
         Summon();
     }
 
-    public void No()
+    public void Decline()
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
-        Debug.Log("npc list length after removal: " + npcList.Count);
-
-        if (npcList[0].GetComponent<Renderer>().enabled == false)
-        {
-            Debug.Log("npc removed: " + npcList[0].name);
-        }
-        else
-        {
-            Debug.Log("npc not removed");
-        }
         Summon();
     }
 }
-
-
-//uim.GetComponent<UIManager>().ChangeScene();
