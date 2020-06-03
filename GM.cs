@@ -81,8 +81,49 @@ public class GM : MonoBehaviour
 
     public void Approve()
     {
+        data.LoadFile();
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
+
+        switch (npcList[0].name)
+        {
+            case "MotherNature":
+                Debug.Log("mothernature here");
+                break;
+            case "Zeke":
+                Debug.Log("zeke here");
+                break;
+            case "Layla":
+                Debug.Log("layla here");
+                break;
+            case "Hugo":
+                Debug.Log("hugo here");
+                break;
+            case "Heinrich":
+                Debug.Log("heinrich here");
+                break;
+            case "Eduardo":
+                Debug.Log("eduardo here");
+                break;
+            case "Darren":
+                Debug.Log("darren here");
+                break;
+            case "Damon":
+                Debug.Log("dmaon here");
+                break;
+            case "Cordelia":
+                Debug.Log("cordelia here");
+                break;
+            case "Adam":
+                Debug.Log("adam here");
+                break;
+            default:
+                Debug.LogError("Error: A fatal error has occured in Approve().");
+                break;
+        }
+
+        data.WaterSustainability += 1;
+        Debug.Log("water sustainability: " + data.WaterSustainability);
         Summon();
     }
 
