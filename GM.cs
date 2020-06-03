@@ -14,14 +14,16 @@ public class GM : MonoBehaviour
 
     public static GM singleton 
     {
-        get  {
+        get  
+        {
             return mSingleton;
         }
     }
 
     public static Data GetData 
     {
-        get  {
+        get  
+        {
             return singleton.data;
         }
     }
@@ -57,7 +59,6 @@ public class GM : MonoBehaviour
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
         foreach (GameObject npc in npcArr)
         {
-            //npc.SetActive(false);
             npc.GetComponent<Renderer>().enabled = false;
         }
         Shuffle(npcArr);
@@ -69,7 +70,6 @@ public class GM : MonoBehaviour
     {
         npcList[0].GetComponent<Renderer>().enabled = true;
         Debug.Log("npc list length before removal: " + npcList.Count);
-
     }
 
     public void Yes()
@@ -77,6 +77,7 @@ public class GM : MonoBehaviour
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
         Debug.Log("npc list length after removal: " + npcList.Count);
+
         if (npcList[0].GetComponent<Renderer>().enabled == false)
         {
             Debug.Log("npc removed: " + npcList[0].name);
@@ -93,6 +94,7 @@ public class GM : MonoBehaviour
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
         Debug.Log("npc list length after removal: " + npcList.Count);
+
         if (npcList[0].GetComponent<Renderer>().enabled == false)
         {
             Debug.Log("npc removed: " + npcList[0].name);

@@ -6,10 +6,12 @@ public class Data
     private int mWaterSustainability;
     public int WaterSustainability
     {
-        get {
+        get 
+        {
             return mWaterSustainability;
         }
-        set {
+        set 
+        {
             if (value >= 0)
             {
                 mWaterSustainability = value;
@@ -20,10 +22,12 @@ public class Data
     private int mEnvironment;
     public int Environment
     {
-        get {
+        get 
+        {
             return mEnvironment;
         }
-        set {
+        set 
+        {
             if (value >= 0)
             {
                 mEnvironment = value;
@@ -34,10 +38,12 @@ public class Data
     private int mEconomy;
     public int Economy
     {
-        get {
+        get 
+        {
             return mEconomy;
         }
-        set {
+        set 
+        {
             if (value >= 0)
             {
                 mEconomy = value;
@@ -48,10 +54,12 @@ public class Data
     private int mSociety;
     public int Society
     {
-        get {
+        get 
+        {
             return mSociety;
         }
-        set {
+        set 
+        {
             if (value >= 0)
             {
                 mSociety = value;

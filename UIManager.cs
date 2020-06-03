@@ -17,23 +17,21 @@ public class UIManager : MonoBehaviour
         Debug.Log("current scene after: " + (currentScene.buildIndex));
     }
 
-    public void PlayGame() {
-
+    public void PlayGame() 
+    {
         if (currentScene.name == "StartScreen") 
         {
             SceneManager.LoadScene(currentScene.buildIndex + 1);
         }
-        else if (currentScene.name == "Choices") {
+        else if (currentScene.name == "Choices") 
+        {
             SceneManager.LoadScene(currentScene.name);
         }
-
     }
 
-    public void QuitGame() {
-
+    public void QuitGame()
+    {
         //Application.Quit();
         UnityEditor.EditorApplication.isPlaying = false;
-
     }
-
 }
