@@ -4,28 +4,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
-{
-
+{ 
     private Scene currentScene;
+    public GameObject GM;
 
     void Start() { currentScene = SceneManager.GetActiveScene(); }
 
-    public void ChangeScene()
-    {
-        Debug.Log("current scene before: " + (currentScene.buildIndex));
-        SceneManager.LoadScene(currentScene.buildIndex + 1);
-        Debug.Log("current scene after: " + (currentScene.buildIndex));
-    }
+    public void ChangeScene() { SceneManager.LoadScene(currentScene.buildIndex + 1); }
 
     public void PlayGame() 
     {
-        if (currentScene.name == "StartScreen") 
+        if (currentScene.name == "StartScreen") { SceneManager.LoadScene(currentScene.buildIndex + 1); }
+        else if (currentScene.name == "EndScreen")
         {
-            SceneManager.LoadScene(currentScene.buildIndex + 1);
-        }
-        else if (currentScene.name == "Choices") 
-        {
-            SceneManager.LoadScene(currentScene.name);
+            GM = GameObject.FindGameObjectWithTag("GM");
+            Destroy(GM);
+            SceneManager.LoadScene(currentScene.buildIndex - 1);
         }
     }
 
