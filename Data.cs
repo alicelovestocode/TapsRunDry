@@ -6,6 +6,34 @@ using UnityEngine;
 
 public class Data 
 {
+    private double mWaterSustainability;
+    public double WaterSustainability
+    {
+        get { return mWaterSustainability;}
+        set { if (value >= 0) { mWaterSustainability = value; } }
+    }
+
+    private double mEnvironment;
+    public double Environment
+    {
+        get { return mEnvironment; }
+        set { if (value >= 0) { mEnvironment = value; } }
+    }
+
+    private double mEconomy;
+    public double Economy
+    {
+        get { return mEconomy; }
+        set { if (value >= 0) { mEconomy = value; } }
+    }
+
+    private double mSociety;
+    public double Society
+    {
+        get { return mSociety; }
+        set { if (value >= 0) { mSociety = value; } }
+    }
+
     public List<string> endListGood;
     public List<string> endListBad;
     public List<string> endListNeutral;
@@ -45,79 +73,13 @@ public class Data
             string[] lines3 = System.IO.File.ReadAllLines(@"Assets\Text\endtext3.txt");
             endListNeutral = new List<string>(lines3);
         }
-        catch (FileNotFoundException e)
-        {
-            Debug.LogError(String.Format("Error: The file was not found: '{0}'", e));
+        catch (FileNotFoundException e) 
+        { 
+            Debug.LogError(String.Format("Error: The file was not found: '{0}'", e)); 
         }
-        catch (IOException e)
-        {
+        catch (IOException e) 
+        { 
             Debug.LogError(String.Format("Error: The file could not be opened: '{0}'", e));
         }
     }
-
-    private double mWaterSustainability;
-    public double WaterSustainability
-    {
-        get 
-        {
-            return mWaterSustainability;
-        }
-        set 
-        {
-            if (value >= 0)
-            {
-                mWaterSustainability = value;
-            }
-        }
-    }
-
-    private double mEnvironment;
-    public double Environment
-    {
-        get 
-        {
-            return mEnvironment;
-        }
-        set 
-        {
-            if (value >= 0)
-            {
-                mEnvironment = value;
-            }
-        }
-    }
-
-    private double mEconomy;
-    public double Economy
-    {
-        get 
-        {
-            return mEconomy;
-        }
-        set 
-        {
-            if (value >= 0)
-            {
-                mEconomy = value;
-            }
-        }
-    }
-
-    private double mSociety;
-    public double Society
-    {
-        get 
-        {
-            return mSociety;
-        }
-        set 
-        {
-            if (value >= 0)
-            {
-                mSociety = value;
-            }
-        }
-    }
-
-
 }
