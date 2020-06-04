@@ -8,8 +8,9 @@ public class Data
 {
     public List<string> endListGood;
     public List<string> endListBad;
+    public List<string> endListNeutral;
 
-    public void LoadFile()
+    public void LoadFiles()
     {
         try
         {
@@ -38,10 +39,24 @@ public class Data
         {
             Debug.LogError(String.Format("Error: The file could not be opened: '{0}'", e));
         }
+
+        try
+        {
+            string[] lines3 = System.IO.File.ReadAllLines(@"Assets\Text\endtext3.txt");
+            endListNeutral = new List<string>(lines3);
+        }
+        catch (FileNotFoundException e)
+        {
+            Debug.LogError(String.Format("Error: The file was not found: '{0}'", e));
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(String.Format("Error: The file could not be opened: '{0}'", e));
+        }
     }
 
-    private int mWaterSustainability;
-    public int WaterSustainability
+    private double mWaterSustainability;
+    public double WaterSustainability
     {
         get 
         {
@@ -56,8 +71,8 @@ public class Data
         }
     }
 
-    private int mEnvironment;
-    public int Environment
+    private double mEnvironment;
+    public double Environment
     {
         get 
         {
@@ -72,8 +87,8 @@ public class Data
         }
     }
 
-    private int mEconomy;
-    public int Economy
+    private double mEconomy;
+    public double Economy
     {
         get 
         {
@@ -88,8 +103,8 @@ public class Data
         }
     }
 
-    private int mSociety;
-    public int Society
+    private double mSociety;
+    public double Society
     {
         get 
         {
