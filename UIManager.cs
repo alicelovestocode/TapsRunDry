@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 { 
     private Scene currentScene;
-    public GameObject GM;
+    private GameObject GM;
 
     void Start() { currentScene = SceneManager.GetActiveScene(); }
 
@@ -15,11 +15,11 @@ public class UIManager : MonoBehaviour
     public void PlayGame() 
     {
         if (currentScene.name == "StartScreen") { SceneManager.LoadScene(currentScene.buildIndex + 1); }
-        else if (currentScene.name == "EndScreen")
+        else if (currentScene.name == "ChoiceScreen")
         {
             GM = GameObject.FindGameObjectWithTag("GM");
             Destroy(GM);
-            SceneManager.LoadScene(currentScene.buildIndex - 1);
+            SceneManager.LoadScene(currentScene.name);
         }
     }
 
