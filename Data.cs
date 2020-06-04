@@ -34,16 +34,23 @@ public class Data
         set { if (value >= 0) { mSociety = value; } }
     }
 
-    public List<string> endListGood;
-    public List<string> endListBad;
-    public List<string> endListNeutral;
+    private double mFinalScore;
+    public double FinalScore
+    {
+        get { return mFinalScore; }
+        set { if (value >= 0) { mFinalScore = value; } }
+    }
+
+    public List<string> EndListGood;
+    public List<string> EndListBad;
+    public List<string> EndListNeutral;
 
     public void LoadFiles()
     {
         try
         {
             string[] lines1 = System.IO.File.ReadAllLines(@"Assets\Text\endtext1.txt");
-            endListBad = new List<string>(lines1);
+            EndListBad = new List<string>(lines1);
         }
         catch (FileNotFoundException e)
         {
@@ -57,7 +64,7 @@ public class Data
         try
         {
             string[] lines2 = System.IO.File.ReadAllLines(@"Assets\Text\endtext2.txt");
-            endListGood = new List<string>(lines2);
+            EndListGood = new List<string>(lines2);
         }
         catch (FileNotFoundException e)
         {
@@ -71,7 +78,7 @@ public class Data
         try
         {
             string[] lines3 = System.IO.File.ReadAllLines(@"Assets\Text\endtext3.txt");
-            endListNeutral = new List<string>(lines3);
+            EndListNeutral = new List<string>(lines3);
         }
         catch (FileNotFoundException e) 
         { 
