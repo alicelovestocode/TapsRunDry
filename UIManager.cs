@@ -7,14 +7,23 @@ public class UIManager : MonoBehaviour
 { 
     private Scene currentScene;
     private GameObject GM;
+    private GameObject AM;
 
-    void Start() { currentScene = SceneManager.GetActiveScene(); }
+    void Start() 
+    { 
+        currentScene = SceneManager.GetActiveScene();
+        AM = GameObject.FindGameObjectWithTag("AUDIO");
+        AM.GetComponent<AudioManager>().Play("Daybreak");
+    }
 
-    public void ChangeScene() { SceneManager.LoadScene(currentScene.buildIndex + 1); }
-
-    public void PlayGame() 
+    public void PlayGame()
     {
-        if (currentScene.name == "StartScreen") { SceneManager.LoadScene(currentScene.buildIndex + 1); }
+        if (currentScene.name == "StartScreen") 
+        {
+            AM = GameObject.FindGameObjectWithTag("AUDIO");
+            AM.GetComponent<AudioManager>().Play("InspiringPiano");
+            SceneManager.LoadScene(currentScene.buildIndex + 1);
+        }
         else if (currentScene.name == "ChoiceScreen")
         {
             GM = GameObject.FindGameObjectWithTag("GM");
@@ -25,7 +34,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitGame()
     {
-        //Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
 }
