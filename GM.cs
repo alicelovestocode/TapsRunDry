@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class GM : MonoBehaviour 
 {
-
     Data data;
-    public GameObject UIM;
-    public GameObject[] npcArr;
-    public GameObject[] envBgArr;
-    public List<GameObject> npcList;
-    public List<GameObject> envBgList;
+    private GameObject UIM;
+    private GameObject scoreCard;
+    private GameObject playBtn;
+    private GameObject quitBtn;
+    private GameObject yesBtn;
+    private GameObject noBtn;
+    private GameObject[] npcArr;
+    private GameObject[] envBgArr;
+    private List<GameObject> npcList;
+    private List<GameObject> envBgList;
     private GameObject goodBg;
     private GameObject neutralBg;
     private GameObject badBg;
+    private bool gameEnd;
 
     static GM mSingleton = null;
 
@@ -38,6 +43,11 @@ public class GM : MonoBehaviour
         data.LoadFiles();
 
         UIM = GameObject.FindGameObjectWithTag("UI");
+        scoreCard = GameObject.FindGameObjectWithTag("SCORE");
+        playBtn = GameObject.FindGameObjectWithTag("PLAY");
+        quitBtn = GameObject.FindGameObjectWithTag("QUIT");
+        yesBtn = GameObject.FindGameObjectWithTag("YES");
+        noBtn = GameObject.FindGameObjectWithTag("NO");
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
         envBgArr = GameObject.FindGameObjectsWithTag("BG");
 
@@ -57,10 +67,13 @@ public class GM : MonoBehaviour
         badBg = envBgList.Find(x => x.name == "EnvironmentBackgroundBad");
 
         neutralBg.GetComponent<Renderer>().enabled = true;
+        scoreCard.GetComponent<Renderer>().enabled = false;
+        playBtn.SetActive(false);
+        quitBtn.SetActive(false);
         Summon();
     }
 
-    void Shuffle(GameObject[] arr)
+    private void Shuffle(GameObject[] arr)
     {
         for (int i = 0; i < arr.Length; i++)
         {
@@ -71,11 +84,11 @@ public class GM : MonoBehaviour
         }
     }
 
-    void Summon()
+    private void Summon()
     {
         if (npcList.Count == 0) 
-        { 
-            UIM.GetComponent<UIManager>().ChangeScene();
+        {
+            gameEnd = true;
             CalculateScore();
         }
         else { npcList[0].GetComponent<Renderer>().enabled = true; }
@@ -220,7 +233,17 @@ public class GM : MonoBehaviour
         Summon();
     }
 
-    void CalculateScore()
+    private void EndGame()
+    {
+        scoreCard.GetComponent<Renderer>().enabled = true;
+        playBtn.SetActive(true);
+        quitBtn.SetActive(true);
+        yesBtn.SetActive(false);
+        noBtn.SetActive(false);
+        UIM.GetComponent<UIManager>().ChangeScene();
+    }
+
+    private void CalculateScore()
     {
         double totalScore = data.WaterSustainability + data.Environment + data.Economy + data.Society;
         double meanAverage = totalScore / 4;
@@ -228,39 +251,27 @@ public class GM : MonoBehaviour
 
         if (meanAverage <= 5)
         {
-            Debug.Log("background to show: " + badBg.name);
             goodBg.GetComponent<Renderer>().enabled = false;
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = true;
 
-            /*if (npcList.Count == 0)
-            {
-                // show end scenario and score
-            }*/
+            if (gameEnd) { EndGame(); }
         }
         else if (meanAverage > 5 && meanAverage < 6)
         {
-            Debug.Log("background to show: " + neutralBg.name);
             goodBg.GetComponent<Renderer>().enabled = false;
             neutralBg.GetComponent<Renderer>().enabled = true;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            /*if (npcList.Count == 0)
-            {
-                // show end scenario and score
-            }*/
+            if (gameEnd) { EndGame(); }
         }
         else if (meanAverage >= 6)
         {
-            Debug.Log("background to show: " + goodBg.name);
             goodBg.GetComponent<Renderer>().enabled = true;
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            /*if (npcList.Count == 0)
-            {
-                // show end scenario and score
-            }*/
+            if (gameEnd) { EndGame(); }
         }
     }
 }
