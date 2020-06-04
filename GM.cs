@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class GM : MonoBehaviour 
+public class GM : MonoBehaviour
 {
     Data data;
     private GameObject UIM;
+    private GameObject AM;
     private GameObject canvas;
     private GameObject scoreCard;
     private GameObject playBtn;
@@ -21,6 +23,7 @@ public class GM : MonoBehaviour
     private GameObject neutralBg;
     private GameObject badBg;
     private bool gameEnd;
+    private bool soundPlaying;
 
     static GM mSingleton = null;
 
@@ -28,7 +31,7 @@ public class GM : MonoBehaviour
 
     public static Data GetData { get { return singleton.data; } }
 
-    void Awake() 
+    void Awake()
     {
         if (mSingleton == null)
         {
@@ -45,6 +48,7 @@ public class GM : MonoBehaviour
         data.LoadFiles();
 
         UIM = GameObject.FindGameObjectWithTag("UI");
+        AM = GameObject.FindGameObjectWithTag("AUDIO");
         scoreCard = GameObject.FindGameObjectWithTag("SCORE");
         playBtn = GameObject.FindGameObjectWithTag("PLAY");
         quitBtn = GameObject.FindGameObjectWithTag("QUIT");
@@ -75,6 +79,9 @@ public class GM : MonoBehaviour
         playBtn.SetActive(false);
         quitBtn.SetActive(false);
 
+        AM.GetComponent<AudioManager>().Stop("Daybreak");
+        AM.GetComponent<AudioManager>().Play("InspiringPiano");
+
         Summon();
     }
 
@@ -91,17 +98,32 @@ public class GM : MonoBehaviour
 
     private void Summon()
     {
-        if (npcList.Count == 0) 
+        if (npcList.Count == 0)
         {
             gameEnd = true;
             CalculateScore();
         }
-        else { npcList[0].GetComponent<Renderer>().enabled = true; }
+        else
+        {
+            npcList[0].GetComponent<Renderer>().enabled = true;
+
+            string[] npcFem = { "MotherNature", "Layla", "Cordelia" };
+            if (npcFem.Contains(npcList[0].name)) { AM.GetComponent<AudioManager>().Play("Female"); }
+            else { AM.GetComponent<AudioManager>().Play("Male"); }
+
+            soundPlaying = true;
+        }
     }
 
     public void Approve()
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
+
+        if (soundPlaying)
+        {
+            AM.GetComponent<AudioManager>().Stop("Male");
+            AM.GetComponent<AudioManager>().Stop("Female");
+        }
 
         switch (npcList[0].name)
         {
@@ -170,6 +192,12 @@ public class GM : MonoBehaviour
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
 
+        if (soundPlaying)
+        {
+            AM.GetComponent<AudioManager>().Stop("Male");
+            AM.GetComponent<AudioManager>().Stop("Female");
+        }
+
         switch (npcList[0].name)
         {
             case "MotherNature":
@@ -228,7 +256,7 @@ public class GM : MonoBehaviour
         Summon();
     }
 
-    private void EndGame(List<string> endList)
+    private void EndGame(List<string> endList, string endClip)
     {
         scoreCard.GetComponent<Renderer>().enabled = true;
         playBtn.SetActive(true);
@@ -241,6 +269,9 @@ public class GM : MonoBehaviour
 
         canvas.GetComponent<ScoreUI>().UpdateScore();
         canvas.GetComponent<ScoreUI>().UpdateDialogue(endList[index]);
+
+        AM.GetComponent<AudioManager>().Stop("InspiringPiano");
+        AM.GetComponent<AudioManager>().Play(endClip);
     }
 
     private void CalculateScore()
@@ -253,7 +284,7 @@ public class GM : MonoBehaviour
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = true;
 
-            if (gameEnd) { EndGame(data.EndListBad); }
+            if (gameEnd) { EndGame(data.EndListBad, "FadedGrandeur"); }
         }
         else if (data.FinalScore > 5 && data.FinalScore < 6)
         {
@@ -261,7 +292,7 @@ public class GM : MonoBehaviour
             neutralBg.GetComponent<Renderer>().enabled = true;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            if (gameEnd) { EndGame(data.EndListNeutral); }
+            if (gameEnd) { EndGame(data.EndListNeutral, "ThinkingTime"); }
         }
         else if (data.FinalScore >= 6)
         {
@@ -269,7 +300,7 @@ public class GM : MonoBehaviour
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            if (gameEnd) { EndGame(data.EndListGood); }
+            if (gameEnd) { EndGame(data.EndListGood, "NewBeginnings"); }
         }
     }
 }
