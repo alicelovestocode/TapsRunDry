@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class GM : MonoBehaviour
 {
     Data data;
     private GameObject UIM;
+    private GameObject canvas;
     private GameObject scoreCard;
     private GameObject playBtn;
     private GameObject quitBtn;
@@ -48,6 +50,7 @@ public class GM : MonoBehaviour
         quitBtn = GameObject.FindGameObjectWithTag("QUIT");
         yesBtn = GameObject.FindGameObjectWithTag("YES");
         noBtn = GameObject.FindGameObjectWithTag("NO");
+        canvas = GameObject.FindGameObjectWithTag("CANVAS");
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
         envBgArr = GameObject.FindGameObjectsWithTag("BG");
 
@@ -55,6 +58,7 @@ public class GM : MonoBehaviour
         data.Environment = 5;
         data.Economy = 5;
         data.Society = 5;
+        data.FinalScore = 0;
 
         foreach (GameObject npc in npcArr) { npc.GetComponent<Renderer>().enabled = false; }
         Shuffle(npcArr);
@@ -70,6 +74,7 @@ public class GM : MonoBehaviour
         scoreCard.GetComponent<Renderer>().enabled = false;
         playBtn.SetActive(false);
         quitBtn.SetActive(false);
+
         Summon();
     }
 
@@ -78,7 +83,7 @@ public class GM : MonoBehaviour
         for (int i = 0; i < arr.Length; i++)
         {
             GameObject tmp = arr[i];
-            int r = Random.Range(i, arr.Length);
+            int r = UnityEngine.Random.Range(i, arr.Length);
             arr[i] = arr[r];
             arr[r] = tmp;
         }
@@ -156,11 +161,6 @@ public class GM : MonoBehaviour
                 break;
         }
 
-        Debug.Log("water sustainability: " + data.WaterSustainability);
-        Debug.Log("environmental: " + data.Environment);
-        Debug.Log("economical: " + data.Economy);
-        Debug.Log("social: " + data.Society);
-
         CalculateScore();
         npcList.RemoveAt(0);
         Summon();
@@ -223,55 +223,53 @@ public class GM : MonoBehaviour
                 break;
         }
 
-        Debug.Log("water sustainability: " + data.WaterSustainability);
-        Debug.Log("environmental: " + data.Environment);
-        Debug.Log("economical: " + data.Economy);
-        Debug.Log("social: " + data.Society);
-
         CalculateScore();
         npcList.RemoveAt(0);
         Summon();
     }
 
-    private void EndGame()
+    private void EndGame(List<string> endList)
     {
         scoreCard.GetComponent<Renderer>().enabled = true;
         playBtn.SetActive(true);
         quitBtn.SetActive(true);
         yesBtn.SetActive(false);
         noBtn.SetActive(false);
-        UIM.GetComponent<UIManager>().ChangeScene();
+        
+        var random = new System.Random();
+        int index = random.Next(endList.Count);
+
+        canvas.GetComponent<ScoreUI>().UpdateScore();
+        canvas.GetComponent<ScoreUI>().UpdateDialogue(endList[index]);
     }
 
     private void CalculateScore()
     {
-        double totalScore = data.WaterSustainability + data.Environment + data.Economy + data.Society;
-        double meanAverage = totalScore / 4;
-        Debug.Log("your average score: " + meanAverage);
+        data.FinalScore = Math.Round(((data.WaterSustainability + data.Environment + data.Economy + data.Society) / 4), 2);
 
-        if (meanAverage <= 5)
+        if (data.FinalScore <= 5)
         {
             goodBg.GetComponent<Renderer>().enabled = false;
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = true;
 
-            if (gameEnd) { EndGame(); }
+            if (gameEnd) { EndGame(data.EndListBad); }
         }
-        else if (meanAverage > 5 && meanAverage < 6)
+        else if (data.FinalScore > 5 && data.FinalScore < 6)
         {
             goodBg.GetComponent<Renderer>().enabled = false;
             neutralBg.GetComponent<Renderer>().enabled = true;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            if (gameEnd) { EndGame(); }
+            if (gameEnd) { EndGame(data.EndListNeutral); }
         }
-        else if (meanAverage >= 6)
+        else if (data.FinalScore >= 6)
         {
             goodBg.GetComponent<Renderer>().enabled = true;
             neutralBg.GetComponent<Renderer>().enabled = false;
             badBg.GetComponent<Renderer>().enabled = false;
 
-            if (gameEnd) { EndGame(); }
+            if (gameEnd) { EndGame(data.EndListGood); }
         }
     }
 }
