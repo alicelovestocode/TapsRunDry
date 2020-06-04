@@ -55,8 +55,15 @@ public class GM : MonoBehaviour
 
     void Start()
     {
+        data.LoadFiles();
+
         uim = GameObject.FindGameObjectWithTag("UI");
         npcArr = GameObject.FindGameObjectsWithTag("NPC");
+
+        data.WaterSustainability = 5;
+        data.Environment = 5;
+        data.Economy = 5;
+        data.Society = 5;
 
         foreach (GameObject npc in npcArr)
         {
@@ -81,49 +88,72 @@ public class GM : MonoBehaviour
 
     public void Approve()
     {
-        data.LoadFile();
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
 
         switch (npcList[0].name)
         {
             case "MotherNature":
-                Debug.Log("mothernature here");
+                data.WaterSustainability += 0.75;
+                data.Environment += 0.75;
                 break;
             case "Zeke":
-                Debug.Log("zeke here");
+                data.WaterSustainability -= 0.5;
+                data.Environment -= 0.75;
+                data.Economy += 0.25;
+                data.Society += 0.75;
                 break;
             case "Layla":
-                Debug.Log("layla here");
+                data.WaterSustainability += 0.25;
+                data.Environment += 0.25;
+                data.Economy -= 0.75;
+                data.Society -= 0.5;
                 break;
             case "Hugo":
-                Debug.Log("hugo here");
+                data.WaterSustainability += 0.75;
+                data.Society += 0.5;
                 break;
             case "Heinrich":
-                Debug.Log("heinrich here");
+                data.WaterSustainability -= 0.75;
+                data.Environment -= 0.75;
+                data.Economy += 0.75;
+                data.Society += 0.5;
                 break;
             case "Eduardo":
-                Debug.Log("eduardo here");
+                data.WaterSustainability -= 0.75;
+                data.Society += 0.25;
                 break;
             case "Darren":
-                Debug.Log("darren here");
+                data.WaterSustainability += 0.75;
+                data.Environment += 0.75;
+                data.Economy -= 0.5;
                 break;
             case "Damon":
-                Debug.Log("dmaon here");
+                data.WaterSustainability -= 0.75;
+                data.Environment -= 0.75;
+                data.Economy += 0.75;
+                data.Society += 0.25;
                 break;
             case "Cordelia":
-                Debug.Log("cordelia here");
+                data.WaterSustainability += 0.75;
+                data.Environment += 0.5;
+                data.Society += 0.5;
                 break;
             case "Adam":
-                Debug.Log("adam here");
+                data.WaterSustainability += 0.75;
+                data.Economy -= 0.25;
+                data.Society += 0.5;
                 break;
             default:
                 Debug.LogError("Error: A fatal error has occured in Approve().");
                 break;
         }
 
-        data.WaterSustainability += 1;
         Debug.Log("water sustainability: " + data.WaterSustainability);
+        Debug.Log("environmental: " + data.Environment);
+        Debug.Log("economical: " + data.Economy);
+        Debug.Log("social: " + data.Society);
+
         Summon();
     }
 
@@ -131,6 +161,65 @@ public class GM : MonoBehaviour
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
         npcList.RemoveAt(0);
+
+        switch (npcList[0].name)
+        {
+            case "MotherNature":
+                data.WaterSustainability -= 0.5;
+                data.Environment -= 0.5;
+                break;
+            case "Zeke":
+                data.WaterSustainability += 0.5;
+                data.Environemnt += 0.5;
+                data.Economy = -0.5;
+                data.Society -= 0.75;
+                break;
+            case "Layla":
+                data.WaterSustainability -= 0.75;
+                data.Environment -= 0.75;
+                data.Economy += 0.75;
+                data.Society += 0.25;
+                break;
+            case "Hugo":
+                data.WaterSustainability -= 0.25;
+                data.Society -= 0.25;
+                break;
+            case "Heinrich":
+                data.Economy -= 0.5;
+                data.Society -= 0.25;
+                break;
+            case "Eduardo":
+                data.Society -= 0.25;
+                break;
+            case "Darren":
+                data.WaterSustainability -= 0.25;
+                data.Environment -= 0.25;
+                data.Economy += 0.5;
+                break;
+            case "Damon":
+                data.WaterSustainability += 0.75;
+                data.Environment += 0.75;
+                data.Economy -= 0.75;
+                break;
+            case "Cordelia":
+                data.WaterSustainability += 0.25;
+                data.Environment += 0.5;
+                data.Society -= 0.25;
+                break;
+            case "Adam":
+                data.WaterSustainability -= 0.5;
+                data.Society -= 0.25;
+                break;
+            default:
+                Debug.LogError("Error: A fatal error has occured in Decline().");
+                break;
+        }
+
+        Debug.Log("water sustainability: " + data.WaterSustainability);
+        Debug.Log("environmental: " + data.Environment);
+        Debug.Log("economical: " + data.Economy);
+        Debug.Log("social: " + data.Society);
+
         Summon();
     }
 }
