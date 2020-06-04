@@ -6,26 +6,58 @@ public class GM : MonoBehaviour
 {
 
     Data data;
-    public GameObject uim;
+    public GameObject UIM;
     public GameObject[] npcArr;
+    public GameObject[] envBgArr;
     public List<GameObject> npcList;
+    public List<GameObject> envBgList;
+    private GameObject goodBg;
+    private GameObject neutralBg;
+    private GameObject badBg;
 
     static GM mSingleton = null;
 
-    public static GM singleton 
+    public static GM singleton { get { return mSingleton; } }
+
+    public static Data GetData { get { return singleton.data; } }
+
+    void Awake() 
     {
-        get  
+        if (mSingleton == null)
         {
-            return mSingleton;
+            mSingleton = this;
+            data = new Data();
+            DontDestroyOnLoad(gameObject);
+            gameObject.tag = "GM";
         }
+        if (mSingleton != this) { Destroy(gameObject); }
     }
 
-    public static Data GetData 
+    void Start()
     {
-        get  
-        {
-            return singleton.data;
-        }
+        data.LoadFiles();
+
+        UIM = GameObject.FindGameObjectWithTag("UI");
+        npcArr = GameObject.FindGameObjectsWithTag("NPC");
+        envBgArr = GameObject.FindGameObjectsWithTag("BG");
+
+        data.WaterSustainability = 5;
+        data.Environment = 5;
+        data.Economy = 5;
+        data.Society = 5;
+
+        foreach (GameObject npc in npcArr) { npc.GetComponent<Renderer>().enabled = false; }
+        Shuffle(npcArr);
+        npcList = new List<GameObject>(npcArr);
+        foreach (GameObject bg in envBgArr) { bg.GetComponent<Renderer>().enabled = false; }
+        envBgList = new List<GameObject>(envBgArr);
+
+        goodBg = envBgList.Find(x => x.name == "EnvironmentBackgroundGood");
+        neutralBg = envBgList.Find(x => x.name == "EnvironmentBackgroundNeutral");
+        badBg = envBgList.Find(x => x.name == "EnvironmentBackgroundBad");
+
+        neutralBg.GetComponent<Renderer>().enabled = true;
+        Summon();
     }
 
     void Shuffle(GameObject[] arr)
@@ -39,57 +71,19 @@ public class GM : MonoBehaviour
         }
     }
 
-    void Awake() 
-    {
-        if (mSingleton == null)
-        {
-            mSingleton = this;
-            data = new Data();
-            DontDestroyOnLoad(gameObject);
-        }
-        if (mSingleton != this)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    void Start()
-    {
-        data.LoadFiles();
-
-        uim = GameObject.FindGameObjectWithTag("UI");
-        npcArr = GameObject.FindGameObjectsWithTag("NPC");
-
-        data.WaterSustainability = 5;
-        data.Environment = 5;
-        data.Economy = 5;
-        data.Society = 5;
-
-        foreach (GameObject npc in npcArr)
-        {
-            npc.GetComponent<Renderer>().enabled = false;
-        }
-        Shuffle(npcArr);
-        npcList = new List<GameObject>(npcArr);
-        Summon();
-    }
-
     void Summon()
     {
-        if (npcList.Count == 0)
-        {
-            uim.GetComponent<UIManager>().ChangeScene();
+        if (npcList.Count == 0) 
+        { 
+            UIM.GetComponent<UIManager>().ChangeScene();
+            CalculateScore();
         }
-        else
-        {
-            npcList[0].GetComponent<Renderer>().enabled = true;
-        }
+        else { npcList[0].GetComponent<Renderer>().enabled = true; }
     }
 
     public void Approve()
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
-        npcList.RemoveAt(0);
 
         switch (npcList[0].name)
         {
@@ -154,13 +148,14 @@ public class GM : MonoBehaviour
         Debug.Log("economical: " + data.Economy);
         Debug.Log("social: " + data.Society);
 
+        CalculateScore();
+        npcList.RemoveAt(0);
         Summon();
     }
 
     public void Decline()
     {
         npcList[0].GetComponent<Renderer>().enabled = false;
-        npcList.RemoveAt(0);
 
         switch (npcList[0].name)
         {
@@ -170,7 +165,7 @@ public class GM : MonoBehaviour
                 break;
             case "Zeke":
                 data.WaterSustainability += 0.5;
-                data.Environemnt += 0.5;
+                data.Environment += 0.5;
                 data.Economy = -0.5;
                 data.Society -= 0.75;
                 break;
@@ -220,6 +215,52 @@ public class GM : MonoBehaviour
         Debug.Log("economical: " + data.Economy);
         Debug.Log("social: " + data.Society);
 
+        CalculateScore();
+        npcList.RemoveAt(0);
         Summon();
+    }
+
+    void CalculateScore()
+    {
+        double totalScore = data.WaterSustainability + data.Environment + data.Economy + data.Society;
+        double meanAverage = totalScore / 4;
+        Debug.Log("your average score: " + meanAverage);
+
+        if (meanAverage <= 5)
+        {
+            Debug.Log("background to show: " + badBg.name);
+            goodBg.GetComponent<Renderer>().enabled = false;
+            neutralBg.GetComponent<Renderer>().enabled = false;
+            badBg.GetComponent<Renderer>().enabled = true;
+
+            /*if (npcList.Count == 0)
+            {
+                // show end scenario and score
+            }*/
+        }
+        else if (meanAverage > 5 && meanAverage < 6)
+        {
+            Debug.Log("background to show: " + neutralBg.name);
+            goodBg.GetComponent<Renderer>().enabled = false;
+            neutralBg.GetComponent<Renderer>().enabled = true;
+            badBg.GetComponent<Renderer>().enabled = false;
+
+            /*if (npcList.Count == 0)
+            {
+                // show end scenario and score
+            }*/
+        }
+        else if (meanAverage >= 6)
+        {
+            Debug.Log("background to show: " + goodBg.name);
+            goodBg.GetComponent<Renderer>().enabled = true;
+            neutralBg.GetComponent<Renderer>().enabled = false;
+            badBg.GetComponent<Renderer>().enabled = false;
+
+            /*if (npcList.Count == 0)
+            {
+                // show end scenario and score
+            }*/
+        }
     }
 }
