@@ -11,6 +11,4 @@ For a demonstration of the game please watch [this video](https://www.youtube.co
 - Sound Designer: Lyle Ezekiel
 
 #### Project Future
-Currently, the team has no plans to take the project further. However, in the event that the team decides to resume development, below is a non-exhaustive checklist containing various modifications we would need to make to the existing game.
-- [ ] Fix known bug with sound volume and pitch adjustment in Audio Manager class
-- [ ] Combine text files into single binary file and redesign parsing function in Data class accordingly
+Currently, the team has no plans to take the project further.
