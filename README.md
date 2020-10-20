@@ -12,3 +12,6 @@ For a demonstration of the game please watch [this video](https://www.youtube.co
 
 #### Project Future
 Currently, the team has no plans to take the project further.
+
+#### Request Assets
+Please contact me on a.ashby1@uni.brighton.ac.uk to request the assets.
